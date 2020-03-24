@@ -1,4 +1,5 @@
 from uuid import UUID
+from binascii import hexlify
 
 from django.db import migrations
 
@@ -7,7 +8,7 @@ def populate_jti_hex(apps, schema_editor):
     OutstandingToken = apps.get_model('token_blacklist', 'OutstandingToken')
 
     for token in OutstandingToken.objects.all():
-        token.jti_hex = token.jti.hex
+        token.jti_hex = hexlify(bytes(token.jti, "utf-8"))
         token.save()
 
 
